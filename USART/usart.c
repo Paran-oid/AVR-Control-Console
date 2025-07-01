@@ -19,7 +19,19 @@ void usart_init(void) {
     UCSR0B = (1 << RXEN0) | (1 << TXEN0);
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 }
+void usart_destroy(void) {
+    UCSR0B &= ~((1 << RXEN0) | (1 << TXEN0));
 
+    // disable interrupts
+    UCSR0B &= ~((1 << RXCIE0) | (1 << TXCIE0) | (1 << UDRIE0));
+
+    UCSR0C = 0;
+
+    UBRR0H = 0;
+    UBRR0L = 0;
+
+    UCSR0A = 0;
+}
 void usart_clear(void) { print_string("\033[2J\033[H"); }
 
 uint8_t receive_byte(void) {

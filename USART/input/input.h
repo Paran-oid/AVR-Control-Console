@@ -3,8 +3,11 @@
 
 #include <avr/io.h>
 
-#define POT_OPTION PC0
+// confirm button
+void button0_init(void);
+void button0_destroy(void);
 
-uint8_t handle_option(void);
+uint8_t option_receive(void);
+int8_t option_handle(uint8_t option, volatile uint8_t* button_pressed);
 
 #endif

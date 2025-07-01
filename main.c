@@ -1,3 +1,4 @@
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -5,13 +6,32 @@
 #include "input.h"
 #include "output.h"
 #include "usart.h"
+#include "utils.h"
+
+volatile uint8_t button_pressed = 0;
+ISR(INT0_vect) { button_pressed = 1; }
 
 int main(void) {
+    uint8_t option = 0;
+    uint8_t res = 0;
+
     usart_init();
     adc_init();
+    button0_init();
+    sei();
 
     while (1) {
-        output_terminal();
+        if (!button_pressed) {
+            output_terminal(&option);
+        } else {
+            res = option_handle(option, &button_pressed);
+            usart_clear();
+            if (res != 0) error_handler();
+
+            button_pressed = 0;
+            option = 0;
+        }
     }
+
     return 0;
 }
