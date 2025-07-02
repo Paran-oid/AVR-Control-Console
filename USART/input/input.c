@@ -38,6 +38,10 @@ int8_t option_handle(uint8_t option, volatile uint8_t* button_pressed) {
             return led_dim(button_pressed);
         case 2:
             return led_blink(button_pressed);
+        case 3:
+            return servo_control(button_pressed);
+        case 4:
+            return analog_voltage_read(button_pressed);
         default:
             break;
     }

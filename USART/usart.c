@@ -58,5 +58,45 @@ void print_string(const char* string) {
         transmit_byte(*string++);
     }
 }
-void print_number(int number) {}
-void print_float(float number) {}
+void print_number(int number) {
+    char buf[12];  // enough for -32768 to 32767 plus null
+    char* p = buf + sizeof(buf) - 1;
+    unsigned int n;
+    *p = '\0';
+
+    if (number < 0) {
+        n = -number;
+    } else {
+        n = number;
+    }
+
+    do {
+        *(--p) = '0' + (n % 10);
+        n /= 10;
+    } while (n > 0);
+
+    if (number < 0) {
+        *(--p) = '-';
+    }
+
+    print_string(p);
+}
+void print_float(float number) {
+    if (number < 0) {
+        print_string("-");
+        number = -number;
+    }
+
+    int int_part = (int)number;
+    int frac_part =
+        (int)((number - int_part) * 100 + 0.5f);  // round to 2 decimals
+
+    print_number(int_part);
+    print_string(".");
+
+    // Print leading zero if needed
+    if (frac_part < 10) {
+        print_string("0");
+    }
+    print_number(frac_part);
+}
