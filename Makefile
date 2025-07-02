@@ -11,8 +11,8 @@ CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall
 # Source and target
 
 TARGET = out/main
-SRC = main.c USART/usart.c USART/output/output.c USART/input/input.c ADC/adc.c PWM/pwm.c utils/utils.c timer/timer.c
-INCLUDE = -IUSART -IUSART/input -IUSART/output -IADC -IPWM -Iutils -Itimer -lm
+SRC = main.c USART/usart.c USART/output/output.c USART/input/input.c ADC/adc.c PWM/pwm.c utils/utils.c timer/timer.c sleep/sleep.c
+INCLUDE = -IUSART -IUSART/input -IUSART/output -IADC -IPWM -Iutils -Itimer -Isleep -lm
 
 #$@ = target file (main.elf), 
 #$^ = all prerequisites (source files).

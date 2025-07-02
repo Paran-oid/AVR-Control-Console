@@ -72,6 +72,7 @@ int8_t analog_voltage_read(volatile uint8_t* button_pressed) {
     print_string("Make sure you modify the macros to your need\r\n");
     print_string("(Press the button to quit)\r\n");
 
+    // TODO: try to correct this
     while (1) {
         if (*button_pressed) {
             break;
