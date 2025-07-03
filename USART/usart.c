@@ -82,21 +82,25 @@ void print_number(int number) {
     print_string(p);
 }
 void print_float(float number) {
-    if (number < 0) {
-        print_string("-");
-        number = -number;
-    }
+    char buf[32];
+    dtostrf(number, 8, 4, buf);
+    print_string(buf);
 
-    int int_part = (int)number;
-    int frac_part =
-        (int)((number - int_part) * 100 + 0.5f);  // round to 2 decimals
+    //     if (number < 0) {
+    //         print_string("-");
+    //         number = -number;
+    //     }
 
-    print_number(int_part);
-    print_string(".");
+    //     int int_part = (int)number;
+    //     int frac_part =
+    //         (int)((number - int_part) * 100 + 0.5f);  // round to 2 decimals
 
-    // Print leading zero if needed
-    if (frac_part < 10) {
-        print_string("0");
-    }
-    print_number(frac_part);
+    //     print_number(int_part);
+    //     print_string(".");
+
+    //     // Print leading zero if needed
+    //     if (frac_part < 10) {
+    //         print_string("0");
+    //     }
+    //     print_number(frac_part);
 }

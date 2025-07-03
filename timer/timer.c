@@ -8,6 +8,24 @@
 #include "adc.h"
 #include "usart.h"
 
+ISR(INT0_vect) {
+    if (!debounce_active) {
+        button_pressed = 1;
+        debounce_active = 1;
+        debounce_counter = DEBOUNCE_TIME_MS;
+    }
+}
+
+ISR(TIMER0_COMPA_vect) {
+    if (debounce_active) {
+        if (--debounce_counter == 0) {
+            debounce_active = 0;
+        }
+    }
+}
+
+ISR(WDT_vect) { wdt_counter++; }
+
 void timer0_init(void) {
     TCCR0A |= (1 << WGM01);  // CTC mode
     OCR0A = 249;             // 249 for 1ms
@@ -18,6 +36,21 @@ void timer0_destroy(void) {
     TCCR0A = 0;
     TCCR0B = 0;
     TIMSK0 = 0;
+}
+
+void wdt_interrupt_init(void) {
+    cli();
+
+    WDTCSR = (1 << WDCE) | (1 << WDE);                 // enable watch dog timer
+    WDTCSR = (1 << WDIE) | (1 << WDP2) | (1 << WDP1);  // Interrupt every ~1s
+    sei();
+}
+
+void wdt_interrupt_destroy(void) {
+    cli();
+    WDTCSR = (1 << WDCE) | (1 << WDE);
+    WDTCSR = 0x00;
+    sei();
 }
 
 void timer1_init(void) {

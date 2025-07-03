@@ -5,6 +5,7 @@
 
 #define POT PC0
 
+#define HOLD_BUTTON PB2
 #define VOLTMETER PC5
 
 /* Note: This voltmeter is only as accurate as your reference voltage.

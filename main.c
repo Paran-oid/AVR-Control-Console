@@ -9,26 +9,6 @@
 #include "usart.h"
 #include "utils.h"
 
-volatile uint8_t debounce_active = 0;
-volatile uint8_t debounce_counter = 0;
-volatile uint8_t button_pressed = 0;
-
-ISR(INT0_vect) {
-    if (!debounce_active) {
-        button_pressed = 1;
-        debounce_active = 1;
-        debounce_counter = DEBOUNCE_TIME_MS;
-    }
-}
-
-ISR(TIMER0_COMPA_vect) {
-    if (debounce_active) {
-        if (--debounce_counter == 0) {
-            debounce_active = 0;
-        }
-    }
-}
-
 int main(void) {
     uint8_t option = 0;
     uint8_t res = 0;
@@ -48,10 +28,7 @@ int main(void) {
             usart_clear();
             if (res != 0) error_handler();
 
-            // option 0 uses PWM on timer0 so we have to reinitialize timer0
-            if (option == 0) {
-                timer0_init();
-            }
+            timer0_init();
 
             button_pressed = 0;
             option = 0;
